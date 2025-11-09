@@ -1,0 +1,814 @@
+:root {
+    --bg: #f3eee6; /* светло-бежевый фон */
+    --paper: #fffdf9; /* «бумага» блоков/меню */
+    --text: #2a2a2a;
+    --accent: #c21c16; /* красный активного пункта */
+    --border: #cfc9bf;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html, body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+/* NAVBAR */
+header {
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+}
+
+.nav .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text)
+}
+
+.nav .brand img {
+    width: 40px;
+    height: 40px
+}
+
+.nav .brand span {
+    font-weight: bold
+}
+
+.nav a.link {
+    text-decoration: none;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 2px;
+}
+
+.nav a.link.active {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* DROPDOWN */
+.nav .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.nav .dropdown > .link {
+    position: relative;
+    z-index: 2;
+}
+
+.nav .dropdown .menu {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    min-width: 260px;
+    margin: 6px 0 0;
+    padding: 8px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e0d6c7;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    display: none;
+    z-index: 50;
+}
+
+.nav .dropdown:hover .menu,
+.nav .dropdown:focus-within .menu {
+    display: block;
+}
+
+.nav .dropdown .menu li {
+    margin: 0;
+}
+
+.nav .dropdown .menu a {
+    display: block;
+    padding: 10px 14px;
+    color: #2b2b2b;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav .dropdown .menu a:hover {
+    background: #f6ede3;
+    color: #a4151a;
+    text-decoration: none;
+}
+
+/* LAYOUT */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 22px 16px;
+    min-height: 70vh
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    color: #7c1512
+}
+
+.section {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    /*border-radius:4px; */
+    padding: 14px
+}
+
+/* LISTS */
+ul.list {
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+
+
+/*ul.list li{
+    padding: 10px 12px;
+    border:1px solid var(--border);
+    background:#fff; margin-bottom: 8px; border-radius:6px;
+}*/
+
+/* FOOTER */
+footer {
+    border-top: 1px solid var(--border);
+    background: var(--paper);
+    padding: 16px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* DOCUMENTS ACCORDION */
+.acc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+
+.acc-item {
+    margin: 10px 0;
+    border: 1px solid #d6c8b5;
+    border-radius: 10px;
+    background: #fdfbf7;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: background .2s, border-color .2s;
+}
+
+.acc-header {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #4a2a1a;
+    font-weight: 600;
+    background: #fffaf3;
+    transition: background .2s;
+}
+
+.acc-header:hover {
+    background: #f4ede3;
+}
+
+.acc-item.open .acc-header {
+    background: #a4151a;
+    color: #fff;
+    border-color: #9a0f12;
+}
+
+.acc-panel {
+    background: #f8f5ef;
+    overflow: hidden;
+    transition: max-height .25s ease;
+}
+
+.acc-panel-inner {
+    padding: 12px 16px;
+}
+
+.folder-head {
+    cursor: pointer;
+    font-weight: 600;
+    color: #6a3a1c;
+    margin: 8px 0;
+    transition: color .2s;
+}
+
+.folder-head:hover {
+    color: #a4151a;
+}
+
+.folder-children {
+    margin-left: 16px;
+    border-left: 1px dashed #d8d0c4;
+    padding-left: 10px;
+}
+
+.acc-files a {
+    color: #0b4ea2;
+    text-decoration: underline;
+}
+
+.acc-files a:hover {
+    color: #a4151a;
+    text-decoration: none;
+}
+
+.acc-panel {
+    max-height: 0;
+}
+
+/* caret (треугольник) для аккордеона documents.html */
+.acc-header {
+    position: relative;
+    padding-right: 34px; /* место под каретку справа */
+}
+
+.acc-header::after {
+    content: "▾";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    font-size: 14px;
+    line-height: 1;
+    color: #a4151a; /* бордовый в закрытом состоянии */
+    transition: transform .2s ease, color .2s ease;
+    pointer-events: none; /* чтобы не мешал клику */
+}
+
+.acc-item.open .acc-header::after {
+    transform: translateY(-50%) rotate(180deg);
+    color: #fff; /* белый на красном открытом заголовке */
+}
+
+/* === блок "Состав муниципального совета" === */
+.council {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.council h2 {
+    text-align: center;
+    font-size: 26px;
+    color: #7c1512;
+    margin-bottom: 20px;
+}
+
+.council-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    align-items: start;
+    justify-items: center;
+}
+
+.member {
+    background: #fffdf9;
+    width: 100%;
+    border: 1px solid #d6c8b5;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    overflow: hidden;
+    transition: transform .2s;
+}
+
+.member:hover {
+    transform: translateY(-3px);
+}
+
+.member img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 3px solid #c21c16;
+}
+
+.member h3 {
+    font-size: 16px;
+    margin: 12px 10px 4px;
+    color: #000;
+    font-weight: bold;
+}
+
+.member p {
+    font-size: 14px;
+    margin: 0 10px 14px;
+    color: #444;
+    line-height: 1.35;
+}
+
+@media (max-width: 600px) {
+    .council-section {
+        grid-template-columns:1fr;
+    }
+}
+
+/* раскрывающиеся блоки с составом */
+.list details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a2a1a;
+}
+
+.list details[open] summary {
+    color: #a4151a;
+}
+
+.council-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 14px;
+}
+
+.member {
+    background: #fffdf9;
+    border: 1px solid #d6c8b5;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    overflow: hidden;
+}
+
+.member img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 3px solid #c21c16;
+}
+
+.member h3 {
+    font-size: 16px;
+    margin: 10px 8px 2px;
+    font-weight: bold;
+}
+
+.member p {
+    font-size: 14px;
+    margin: 0 10px 12px;
+    color: #444;
+}
+
+/* === Аккордеон на mo.html (как на documents.html) === */
+.list li {
+    background: transparent;
+}
+
+/* убираем белый фон у LI-обёртки */
+
+.list details {
+    margin: 12px 0;
+    border: 1px solid #d6c8b5;
+    border-radius: 10px;
+    background: #fdfbf7; /* светлее фона страницы */
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+/* шапка как acc-header */
+.list details > summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    list-style: none;
+    background: #fffaf3;
+    color: #4a2a1a;
+    font-weight: 600;
+    user-select: none;
+}
+
+.list details > summary:hover {
+    background: #f4ede3;
+}
+
+/* убираем стандартный треугольник и рисуем свой */
+.list details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.list details > summary::after {
+    content: "▾";
+    float: right;
+    transition: transform .2s ease;
+}
+
+.list details[open] > summary {
+    background: #a4151a;
+    color: #fff;
+}
+
+.list details[open] > summary::after {
+    transform: rotate(180deg);
+}
+
+/* тело панели, как acc-panel-inner */
+.list details .section {
+    background: #f8f5ef;
+    /*padding: 12px 16px;*/
+    border-top: 1px solid #e8dfd2;
+    margin: 0; /* если вдруг где-то было inline margin-top */
+}
+
+/* список файлов — как аккуратные плашки */
+.list details .section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list details .section ul li {
+    margin: 6px 0;
+}
+
+.list details .section ul a {
+    display: block;
+    padding: 8px 10px;
+    /*background: #fff;*/
+    /*border: 1px solid #e6dfd4;*/
+    border-radius: 6px;
+    color: #0b4ea2;
+    text-decoration: underline;
+}
+
+.list details .section ul a:hover {
+    color: #a4151a;
+    text-decoration: none;
+}
+
+/* mo.html — привести списки файлов к виду как в documents.html */
+.list details .section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list details .section ul li {
+    margin: 2px 0; /* плотнее по вертикали */
+    line-height: 1.4;
+}
+
+.list details .section ul a {
+    display: inline;
+    padding: 0;
+    color: #0645ad;
+    text-decoration: underline;
+    background: none;
+    border: none;
+}
+
+.list details .section ul a:hover {
+    color: #a4151a;
+    text-decoration: none;
+}
+
+/* --- особые карточки руководителей --- */
+.council-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* крупные карточки (первые два) занимают по 1/2 ширины строки */
+/*.member.big {*/
+/*    grid-column: span 3;       !* на сетке из 6–9 колонок — шире *!*/
+/*}*/
+
+@media (min-width: 900px) {
+    /* на широком экране две крупные карточки в ряд */
+    .council-section {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .member.big {
+        grid-column: span 3; /* каждая по половине */
+    }
+
+    .member:not(.big) {
+        grid-column: span 2; /* обычные карточки — 3 в строке */
+    }
+}
+
+@media (max-width: 899px) and (min-width: 601px) {
+    /* на средних экранах — 2 крупных в ряд, потом 2–3 обычные */
+    .council-section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .member.big {
+        grid-column: span 2;
+    }
+
+    .member:not(.big) {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    /* на телефонах всё по одной колонке */
+    .council-section {
+        grid-template-columns: 1fr;
+    }
+
+    .member.big, .member {
+        grid-column: span 1;
+    }
+}
+
+/* --- отступы внутри карточек совета --- */
+/*.member {*/
+/*    padding: 10px;              !* добавляем внутренние отступы *!*/
+/*    background: #fffdf9;*/
+/*    border: 1px solid #d6c8b5;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 1px 3px rgba(0,0,0,0.05);*/
+/*    text-align: center;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.member img {*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    display: block;*/
+/*    border-bottom: 3px solid #c21c16;*/
+/*    border-radius: 6px;          !* немного скруглим фото внутри карточки *!*/
+/*}*/
+
+/*.member h3 {*/
+/*    font-size: 16px;*/
+/*    margin: 12px 6px 4px;*/
+/*    color: #000;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.member p {*/
+/*    font-size: 14px;*/
+/*    margin: 0 6px 10px;*/
+/*    color: #444;*/
+/*    line-height: 1.35;*/
+/*}*/
+
+/*fffff*/
+/* внутренние отступы тела панели "Муниципальный совет" */
+#council .council-section {
+    padding: 12px 16px; /* воздух между краями панели и карточками */
+    background: #f8f5ef; /* как у остальных секций */
+    border-top: 1px solid #e8dfd2;
+}
+
+/* (опционально) чуть скруглить "полотно" секции */
+#council details {
+    overflow: hidden; /* чтобы фон/скругления выглядели аккуратно */
+}
+
+/*плавное открытие*/
+/* === Плавное раскрытие блоков в mo.html === */
+/*.list details {*/
+/*    overflow: hidden;*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*.list details[open] .section,*/
+/*.list details[open] .council-section {*/
+/*    animation: expandDown 0.3s ease forwards;*/
+/*}*/
+
+/*@keyframes expandDown {*/
+/*    0% {*/
+/*        opacity: 0;*/
+/*        transform: translateY(-4px);*/
+/*    }*/
+/*    100% {*/
+/*        opacity: 1;*/
+/*        transform: translateY(0);*/
+/*    }*/
+/*}*/
+
+/* Плавное раскрытие панелей в mo.html — как в documents.html */
+.list details .mo-panel{
+    overflow: hidden;
+    max-height: 0;                       /* закрыто по умолчанию */
+    transition: max-height .25s ease;    /* та же плавность, что в documents */
+}
+
+/* чуть унифицируем фон "тела" панелей */
+#council .council-section.mo-panel,
+.list details .section.mo-panel{
+    background: #f8f5ef;
+    border-top: 1px solid #e8dfd2;
+    padding: 12px 16px;
+}
+
+/* Плавное открытие/закрытие панелей в mo.html (как в documents.html) */
+.list details .mo-panel{
+    overflow: hidden;
+    max-height: 0;                       /* закрыто по умолчанию */
+    transition: max-height .25s ease;    /* та же плавность, что и в documents */
+    will-change: max-height;
+}
+
+/* именно анимируемая панель рисует фон/скругление/границу */
+.mo-panel{
+    overflow: hidden;
+    transition: max-height .28s ease;
+    background: #f8f5ef;
+    padding: 12px 16px;
+
+    /* сверху тонкая разделительная линия под summary */
+    border-top: 1px solid #e8dfd2;
+
+    /* скругляем низ панели, чтобы не «торчали» квадраты в углах */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* убираем конфликтующие фоны/рамки/отступы у внутренней обёртки */
+.list details .section{
+    background: transparent !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+/*dddd*/
+/* панель внутри details (mo.html) */
+.mo-panel{
+    overflow: hidden;
+    transition: max-height .28s ease;
+    background: #f8f5ef;
+    padding: 12px 16px;
+
+    /* было: border-top: 1px solid #e8dfd2;  ← это и давало белую полоску */
+    border-top: 0;                           /* убираем разделительную линию */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* обертка .section внутри details — без своих отступов и рамок */
+.list details .section{
+    background: transparent !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* на всякий случай — чтобы ничто не «толкало» контент вниз */
+.council-section{ margin-top: 0; }
+
+/*admin*/
+/* === Местная администрация === */
+.admin-block{
+    padding: 10px 12px;
+}
+.admin-head p{
+    margin: 4px 0;
+}
+.admin-subtitle{
+    margin: 14px 0 8px;
+    font-size: 18px;
+    color: #7c1512;
+}
+
+/* Внутренний аккордеон отделов (не влияет на внешний) */
+.sub-acc{ margin-top: 6px; }
+
+.sub-acc details{
+    border: 1px solid #d6c8b5;
+    border-radius: 8px;
+    background: #fffaf3;
+    margin: 8px 0;
+    overflow: hidden;
+    /* плавность как в documents.html */
+    transition: background .2s ease;
+}
+.sub-acc details > summary{
+    padding: 10px 12px;
+    list-style: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a2a1a;
+    user-select: none;
+}
+.sub-acc details > summary::-webkit-details-marker{ display:none; }
+.sub-acc details > summary::after{
+    content: "▾";
+    float: right;
+    transition: transform .2s ease;
+}
+.sub-acc details[open] > summary{
+    background: #a4151a;
+    color: #fff;
+}
+.sub-acc details[open] > summary::after{
+    transform: rotate(180deg);
+}
+
+/* тело внутренней панели */
+.sub-acc .panel{
+    background: #f8f5ef;
+    padding: 12px 14px;
+    border-top: 1px solid #e8dfd2;
+}
+
+/* опционально: сделать ссылки внутри панелей как в documents.html */
+.sub-acc .panel a{
+    color:#0b4ea2; text-decoration: underline;
+}
+.sub-acc .panel a:hover{
+    color:#a4151a; text-decoration: none;
+}
+
+/*fdsssfsf*/
+/* ====== ВНУТРЕННИЕ ОТДЕЛЫ (ADMIN) ====== */
+#admin .dept{
+    margin: 8px 0;
+    border: 1px solid #e6dfd4;
+    border-radius: 10px;
+    background: #fdfbf7;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    overflow: hidden;
+}
+
+/* «шапка» отдела — как маленький acc-header */
+#admin .dept > summary{
+    padding: 10px 14px;
+    cursor: pointer;
+    list-style: none;
+    background: #fffaf3;
+    color: #4a2a1a;
+    font-weight: 600;
+    user-select: none;
+}
+#admin .dept > summary:hover{ background:#f4ede3; }
+
+/* стрелочка справа */
+#admin .dept > summary::-webkit-details-marker{ display:none; }
+#admin .dept > summary::after{
+    content: "▾";
+    float: right;
+    transition: transform .2s ease;
+    color: #7c1512;
+}
+#admin .dept[open] > summary{ background:#a4151a; color:#fff; }
+#admin .dept[open] > summary::after{ transform: rotate(180deg); color:#fff; }
+
+/* тело отдела — как acc-panel-inner */
+/*#admin .dept .dept-body{*/
+/*    background: #f8f5ef;*/
+/*    border-top: 1px solid #e8dfd2;*/
+/*    padding: 12px 16px;*/
+/*    !* анимация max-height управляется из JS *!*/
+/*}*/
+#admin .dept .dept-body{
+    background:#f8f5ef;
+    border-top:1px solid #e8dfd2;
+    padding:12px 16px;
+    overflow:hidden;
+    transition:max-height .25s ease;
+}
+
+/* список людей/описаний — в стиле «список файлов» */
+#admin .dept .dept-body p{
+    margin: 6px 0 10px 0;
+}
+#admin .dept .dept-body .role{
+    margin: 6px 0;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+/* ===== Отступы для блока руководства местной администрации ===== */
+#admin .leaders {
+    padding: 12px 18px 8px 18px;  /* внутренние отступы */
+    line-height: 1.6;             /* немного увеличим межстрочный интервал */
+}
+
+#admin .leaders p {
+    margin: 6px 0;
+    font-size: 16px;
+}

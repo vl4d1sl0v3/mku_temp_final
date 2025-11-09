@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Документы — МО «Красненькая речка»</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-active="docs">
+<header id="site-header"></header>
+
+<main>
+  <h1>Документы</h1>
+  <ul class="acc-list" id="acc-list"></ul>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="include.js"></script>
+
+<script>
+  /* === Настройки под структуру === */
+  const BASE_PATH    = './files/docs_list';
+  const MANIFEST_URL = './docs-manifest.json';
+
+  /* === Утилиты === */
+  const isObj = v => typeof v === 'object' && v !== null;
+  const enc   = p => p.split('/').map(encodeURIComponent).join('/');
+  function sortEntries([an,av],[bn,bv]){
+    const ao = isObj(av), bo = isObj(bv);
+    if (ao !== bo) return ao ? -1 : 1;
+    return an.localeCompare(bn, 'ru');
+  }
+
+  /* === Строим узлы === */
+  function fileRow(name, rel){
+    const d = document.createElement('div');
+    const a = document.createElement('a');
+    a.href = `${BASE_PATH}/${enc(rel)}`;
+    a.textContent = name;
+    a.download = '';
+    a.rel = 'noopener';
+    d.appendChild(a);
+    return d;
+  }
+
+  function folderNode(name, obj, onResize){
+    const wrap = document.createElement('div');
+    const head = document.createElement('div');
+    head.className = 'folder-head';
+    head.textContent = name;
+
+    const kids = document.createElement('div');
+    kids.className = 'folder-children';
+    kids.style.display = 'none';
+
+    head.addEventListener('click', ()=>{
+      kids.style.display = (kids.style.display === 'none') ? 'block' : 'none';
+      if (typeof onResize === 'function') onResize();
+    });
+
+    wrap.appendChild(head);
+    wrap.appendChild(kids);
+
+    Object.entries(obj).sort(sortEntries).forEach(([n,v])=>{
+      if (n === '.DS_Store' || n.startsWith('~$')) return;
+      kids.appendChild(isObj(v) ? folderNode(n, v, onResize) : fileRow(n, v));
+    });
+    return wrap;
+  }
+
+  function adjustPanelHeight(panel){
+    requestAnimationFrame(()=>{
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    });
+  }
+
+  function renderAccItem(title, data){
+    const li = document.createElement('li');
+    li.className = 'acc-item';
+
+    const header = document.createElement('a');
+    header.href = '#';
+    header.className = 'acc-header';
+    header.innerHTML = `<span class="title">${title}</span>`;
+    li.appendChild(header);
+
+    const panel = document.createElement('div');
+    panel.className = 'acc-panel';
+    const inner = document.createElement('div');
+    inner.className = 'acc-panel-inner acc-files';
+    panel.appendChild(inner);
+    li.appendChild(panel);
+
+    const onResize = ()=>adjustPanelHeight(panel);
+
+    Object.entries(data).sort(sortEntries).forEach(([n,v])=>{
+      if (n === '.DS_Store' || n.startsWith('~$')) return;
+      inner.appendChild(isObj(v) ? folderNode(n, v, onResize) : fileRow(n, v));
+    });
+
+    header.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const list = document.getElementById('acc-list');
+      [...list.querySelectorAll('.acc-item')].forEach(item=>{
+        const pnl = item.querySelector('.acc-panel');
+        if (item === li){
+          const open = item.classList.contains('open');
+          if (open){
+            pnl.style.maxHeight = '0px';
+            item.classList.remove('open');
+          } else {
+            item.classList.add('open');
+            adjustPanelHeight(pnl);
+          }
+        } else {
+          pnl.style.maxHeight = '0px';
+          item.classList.remove('open');
+        }
+      });
+    });
+
+    return li;
+  }
+
+  async function initDocs(){
+    const res = await fetch(MANIFEST_URL, {cache:'no-store'});
+    if (!res.ok) throw new Error('manifest load error');
+    const manifest = await res.json();
+
+    const acc = document.getElementById('acc-list');
+    const keys = Object.keys(manifest).sort((a,b)=>a.localeCompare(b,'ru'));
+    keys.forEach((k)=>{
+      const item = renderAccItem(k, manifest[k]);
+      acc.appendChild(item);
+      // всё схлопнуто при загрузке
+    });
+  }
+
+  initDocs().catch(err=>{
+    console.error(err);
+    document.getElementById('acc-list').insertAdjacentHTML('afterend',
+            '<p>Не удалось загрузить список документов. Проверьте <code>docs-manifest.json</code>.</p>');
+  });
+</script>
+</body>
+</html>
